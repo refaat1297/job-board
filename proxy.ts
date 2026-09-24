@@ -8,7 +8,7 @@ export function proxy(request: NextRequest) {
   const pathname = url.pathname
 
   const isAdminHost = host.startsWith("admin-wazifa-app.vercel.app")
-  if (isAdminHost) {
+  if (isAdminHost && !pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
@@ -21,5 +21,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)',],
+  matcher: ['/((?!api|_next/static|_next/image|sw\\.js).*)',],
 }
