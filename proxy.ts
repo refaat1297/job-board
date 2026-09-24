@@ -7,12 +7,12 @@ export function proxy(request: NextRequest) {
   const url = request.nextUrl
   const pathname = url.pathname
 
-  const isAdminHost = host.startsWith("admin-wazifa-app.vercel.app")
+  const isAdminHost = host === "admin-wazifa-app.vercel.app"
   if (isAdminHost && !pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
-  const isMainDomain = host.startsWith("wazifa-app.vercel.app")
+  const isMainDomain = host === "wazifa-app.vercel.app"
   if (isMainDomain && pathname.includes("/dashboard")) {
     return NextResponse.redirect(new URL("/", request.url))
   }
