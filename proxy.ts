@@ -7,20 +7,19 @@ export function proxy(request: NextRequest) {
   const url = request.nextUrl
   const pathname = url.pathname
 
-  console.log('host', host)
   const isAdminHost = host.startsWith("admin-wazifa-app.vercel.app")
   if (isAdminHost) {
-    return NextResponse.rewrite(new URL("/dashboard", request.url))
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   const isMainDomain = host.startsWith("wazifa-app.vercel.app")
   if (isMainDomain && pathname.includes("/dashboard")) {
-    return NextResponse.rewrite(new URL("/", request.url))
+    return NextResponse.redirect(new URL("/", request.url))
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/jobs/:path*"],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)',],
 }
