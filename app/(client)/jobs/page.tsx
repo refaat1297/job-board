@@ -1,7 +1,9 @@
+import JobsListingWrapper from "@/components/jobs/JobsListingWrapper";
+
 function JobsPage() {
   return (
-    <div>
-      <h1>Jobs</h1>
+    <div className="max-w-7xl mx-auto px-6 py-8">
+      <JobsListingWrapper />
     </div>
   )
 }
