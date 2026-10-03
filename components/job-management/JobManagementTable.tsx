@@ -1,11 +1,46 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Job } from "@/types/Job";
+import DeletePopup from "../common/DeletePopup";
+import { useState } from "react";
 
 type Props = {
   jobs: Job[];
 }
 
 function JobManagementTable({ jobs}: Props) {
+
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [jobIdToDelete, setJobIdToDelete] = useState<string | null>(null);
+  const navigate = useRouter();
+
+  const onEditJob = (jobId: string) => {
+    navigate.push(`/dashboard/jobs/${jobId}/edit`);
+  };
+
+  const onDeleteJob = (jobId: string) => {
+    setIsDeletePopupOpen(true);
+    setJobIdToDelete(jobId);
+  };
+
+  const reset = () => {
+    setIsDeletePopupOpen(false);
+    setJobIdToDelete(null);
+  };
+
+  const handleDeleteJob = () => {
+    // TODO: Delete job from database
+    console.log(`Deleting job with ID: ${jobIdToDelete}`);
+    //Reset the state
+    reset();
+  };
+
+  const handleCancelDelete = () => {
+    //Reset the state
+    reset();
+  };
+
   return (
     <div className="mt-8 brutal-border overflow-x-auto">
       <table className="w-full">
@@ -60,6 +95,7 @@ function JobManagementTable({ jobs}: Props) {
                   variant="outline"
                   size="sm"
                   className="brutal-shadow-none shadow-none"
+                  onClick={() => onEditJob(job.id)}
                 >
                   EDIT
                 </Button>
@@ -67,6 +103,7 @@ function JobManagementTable({ jobs}: Props) {
                   variant="destructive"
                   size="sm"
                   className="border-l-0 brutal-shadow-none shadow-none"
+                  onClick={() => onDeleteJob(job.id)}
                 >
                   DELETE
                 </Button>
@@ -76,6 +113,12 @@ function JobManagementTable({ jobs}: Props) {
         ))}
         </tbody>
       </table>
+
+      <DeletePopup
+        isOpen={isDeletePopupOpen}
+        onDelete={handleDeleteJob}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 }
