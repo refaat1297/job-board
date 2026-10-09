@@ -2,45 +2,25 @@
 import { Input } from "../ui/input";
 import { BrutalSelect } from "../BrutalUI";
 import { Button } from "../ui/button";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {createJobAction} from "@/app/actions/jobs/createJob.action";
 
 function CreateJobForm() {
   const navigate = useRouter();
-  const [form, setForm] = useState({
-    title: "",
-    company: "",
-    location: "",
-    type: "FULL-TIME",
-    salary: "",
-    description: "",
-    requirements: "",
-    tags: "",
-  });
-
-  const update = (field: string, value: string) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate.push("/dashboard/jobs");
-  };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 brutal-border p-6 space-y-6">
+    <form action={createJobAction} className="mt-8 brutal-border p-6 space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
           label="JOB TITLE"
+          name="title"
           placeholder="e.g. SENIOR FRONTEND ENGINEER"
-          value={form.title}
-          onChange={(e) => update("title", e.target.value)}
           required
         />
         <Input
           label="COMPANY"
+          name="company"
           placeholder="e.g. NEXUS LABS"
-          value={form.company}
-          onChange={(e) => update("company", e.target.value)}
           required
         />
       </div>
@@ -48,15 +28,13 @@ function CreateJobForm() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Input
           label="LOCATION"
+          name="location"
           placeholder="e.g. REMOTE"
-          value={form.location}
-          onChange={(e) => update("location", e.target.value)}
           required
         />
         <BrutalSelect
           label="TYPE"
-          value={form.type}
-          onChange={(e) => update("type", e.target.value)}
+          name="type"
           options={[
             { value: "FULL-TIME", label: "FULL-TIME" },
             { value: "PART-TIME", label: "PART-TIME" },
@@ -66,18 +44,16 @@ function CreateJobForm() {
         />
         <Input
           label="SALARY RANGE"
+          name="salary"
           placeholder="e.g. $140K–$180K"
-          value={form.salary}
-          onChange={(e) => update("salary", e.target.value)}
           required
         />
       </div>
 
       <Input
         label="TAGS (COMMA SEPARATED)"
+        name="tags"
         placeholder="e.g. REACT, TYPESCRIPT, WEBGL"
-        value={form.tags}
-        onChange={(e) => update("tags", e.target.value)}
       />
 
       <div>
@@ -86,9 +62,8 @@ function CreateJobForm() {
         </label>
         <textarea
           className="w-full brutal-border bg-background px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px] focus:shadow-accent min-h-[120px] resize-y"
+          name="description"
           placeholder="Describe the role, responsibilities, and what makes it exciting..."
-          value={form.description}
-          onChange={(e) => update("description", e.target.value)}
           required
         />
       </div>
@@ -99,11 +74,10 @@ function CreateJobForm() {
         </label>
         <textarea
           className="w-full brutal-border bg-background px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px] focus:shadow-accent min-h-[100px] resize-y"
+          name="requirements"
           placeholder={
             "5+ years React\nTypeScript expert\nSystem design skills"
           }
-          value={form.requirements}
-          onChange={(e) => update("requirements", e.target.value)}
         />
       </div>
 
@@ -112,7 +86,7 @@ function CreateJobForm() {
           PUBLISH JOB
         </Button>
         <Button
-          type="button"
+          type="submit"
           variant="outline"
           className="border-l-0"
           onClick={() => navigate.push("/dashboard/jobs")}
