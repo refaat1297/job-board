@@ -3,25 +3,23 @@ import { Input } from "../ui/input";
 import { BrutalSelect } from "../BrutalUI";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import {createJobAction} from "@/app/actions/jobs/createJob.action";
+import {jobsAction} from "@/app/actions/jobs/jobs.action";
 
 function CreateJobForm() {
   const navigate = useRouter();
 
   return (
-    <form action={createJobAction} className="mt-8 brutal-border p-6 space-y-6">
+    <form action={jobsAction} className="mt-8 brutal-border p-6 space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
           label="JOB TITLE"
           name="title"
           placeholder="e.g. SENIOR FRONTEND ENGINEER"
-          required
         />
         <Input
           label="COMPANY"
           name="company"
           placeholder="e.g. NEXUS LABS"
-          required
         />
       </div>
 
@@ -30,7 +28,6 @@ function CreateJobForm() {
           label="LOCATION"
           name="location"
           placeholder="e.g. REMOTE"
-          required
         />
         <BrutalSelect
           label="TYPE"
@@ -46,7 +43,6 @@ function CreateJobForm() {
           label="SALARY RANGE"
           name="salary"
           placeholder="e.g. $140K–$180K"
-          required
         />
       </div>
 
@@ -64,7 +60,6 @@ function CreateJobForm() {
           className="w-full brutal-border bg-background px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px] focus:shadow-accent min-h-[120px] resize-y"
           name="description"
           placeholder="Describe the role, responsibilities, and what makes it exciting..."
-          required
         />
       </div>
 
