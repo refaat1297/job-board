@@ -1,12 +1,18 @@
 import {HeroSection} from "@/components/landing/HeroSection";
 import {FeaturedJobs} from "@/components/landing/FeaturedJobs";
-import {JobsData} from "@/data";
+import { getJobs } from "@/services/jobs/jobs.service";
 
-export default function Home() {
+export default async function Home() {
+  const result = await getJobs();
+  if (!result.success) {
+    return <div>Error loading jobs</div>;
+  }
+  const { data: jobs = [] } = result;
+
   return (
     <>
       <HeroSection />
-      <FeaturedJobs jobs={JobsData} />
+      <FeaturedJobs jobs={jobs} />
     </>
   );
 }
