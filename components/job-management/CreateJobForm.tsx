@@ -3,23 +3,30 @@ import { Input } from "../ui/input";
 import { BrutalSelect } from "../BrutalUI";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import {jobsAction} from "@/app/actions/jobs/jobs.action";
+import {handleCreateJob, CreateJobState} from "@/app/actions/jobs/jobs.action";
+import {useActionState} from "react";
+import {Textarea} from "@/components/ui/textarea";
 
 function CreateJobForm() {
   const navigate = useRouter();
 
+  const [state, formAction, isPending] = useActionState<CreateJobState, FormData>(handleCreateJob, undefined)
+
+  console.log('state', state)
   return (
-    <form action={jobsAction} className="mt-8 brutal-border p-6 space-y-6">
+    <form action={formAction} className="mt-8 brutal-border p-6 space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
           label="JOB TITLE"
           name="title"
           placeholder="e.g. SENIOR FRONTEND ENGINEER"
+          error={state?.errors?.title?.[0]}
         />
         <Input
           label="COMPANY"
           name="company"
           placeholder="e.g. NEXUS LABS"
+          error={state?.errors?.company?.[0]}
         />
       </div>
 
@@ -28,11 +35,14 @@ function CreateJobForm() {
           label="LOCATION"
           name="location"
           placeholder="e.g. REMOTE"
+          error={state?.errors?.location?.[0]}
         />
         <BrutalSelect
           label="TYPE"
           name="type"
+          error={state?.errors?.type?.[0]}
           options={[
+            { value: "", label: "SELECT TYPE" },
             { value: "FULL-TIME", label: "FULL-TIME" },
             { value: "PART-TIME", label: "PART-TIME" },
             { value: "CONTRACT", label: "CONTRACT" },
@@ -43,6 +53,7 @@ function CreateJobForm() {
           label="SALARY RANGE"
           name="salary"
           placeholder="e.g. $140K–$180K"
+          error={state?.errors?.salary?.[0]}
         />
       </div>
 
@@ -50,16 +61,17 @@ function CreateJobForm() {
         label="TAGS (COMMA SEPARATED)"
         name="tags"
         placeholder="e.g. REACT, TYPESCRIPT, WEBGL"
+        error={state?.errors?.tags?.[0]}
       />
 
       <div>
         <label className="font-heading text-xs font-bold uppercase block mb-2">
           DESCRIPTION
         </label>
-        <textarea
-          className="w-full brutal-border bg-background px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px] focus:shadow-accent min-h-[120px] resize-y"
+        <Textarea
           name="description"
           placeholder="Describe the role, responsibilities, and what makes it exciting..."
+          error={state?.errors?.description?.[0]}
         />
       </div>
 
@@ -67,12 +79,13 @@ function CreateJobForm() {
         <label className="font-heading text-xs font-bold uppercase block mb-2">
           REQUIREMENTS (ONE PER LINE)
         </label>
-        <textarea
+        <Textarea
           className="w-full brutal-border bg-background px-4 py-3 font-mono text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px] focus:shadow-accent min-h-[100px] resize-y"
           name="requirements"
           placeholder={
             "5+ years React\nTypeScript expert\nSystem design skills"
           }
+          error={state?.errors?.requirements?.[0]}
         />
       </div>
 

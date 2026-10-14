@@ -3,7 +3,11 @@
 import {createJob} from "@/services/jobs/jobs.service";
 import {CreateJobInput} from "@/services/jobs/jobs.validation";
 
-export async function jobsAction(formData: FormData) {
+export type CreateJobState = {
+  errors?: Record<string, string[]>
+} | undefined
+
+export async function handleCreateJob(prevStat: CreateJobState, formData: FormData): Promise<CreateJobState> {
   const raw = Object.fromEntries(formData)
 
   const data = {
@@ -12,5 +16,9 @@ export async function jobsAction(formData: FormData) {
     requirements: (raw.requirements as string).split("\n"),
   }
 
-  return await createJob(data)
+  const result = await createJob(data)
+
+  if (!result.success) {
+    return  { errors: result.errors }
+  }
 }
