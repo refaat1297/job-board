@@ -1,15 +1,14 @@
 import { useState } from "react";
-import JobsContext from "./UsersContext";
+import UsersContext from "./UsersContext";
 import { ApplicationsData } from "@/data/ApplicationsData";
 import { CandidateData } from "@/data/CandidateData";
 import { Application, Job, Candidate } from "@/types";
-import { JobsData } from "@/data/JobsData";
 
-const UsersProvider = ({ children }: { children: React.ReactNode }) => {
+const UsersProvider = ({ jobs = [], children }: { jobs: Job[], children: React.ReactNode }) => {
   const [search, setSearch] = useState("");
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Candidate[]>(CandidateData);
-  const [jobs, setJobs] = useState<Job[]>(JobsData);
+  const [jobState] = useState<Job[]>(jobs);
   const [applications, setApplications] =
     useState<Application[]>(ApplicationsData);
   const filteredCandidates = candidates.filter(
@@ -28,7 +27,7 @@ const UsersProvider = ({ children }: { children: React.ReactNode }) => {
       : 0;
 
   return (
-    <JobsContext.Provider
+    <UsersContext.Provider
       value={{
         search,
         setSearch,
@@ -36,8 +35,7 @@ const UsersProvider = ({ children }: { children: React.ReactNode }) => {
         setExpandedUser,
         candidates,
         setCandidates,
-        jobs,
-        setJobs,
+        jobs: jobState,
         applications,
         setApplications,
         filteredCandidates,
@@ -45,7 +43,7 @@ const UsersProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-    </JobsContext.Provider>
+    </UsersContext.Provider>
   );
 };
 

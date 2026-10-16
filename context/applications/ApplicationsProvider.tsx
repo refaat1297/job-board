@@ -1,16 +1,15 @@
 import { useState } from "react";
-import JobsContext from "./ApplicationsContext";
+import ApplicationsContext from "./ApplicationsContext";
 import { ApplicationsData } from "@/data/ApplicationsData";
 import { CandidateData } from "@/data/CandidateData";
 import { getCandidate } from "@/utils";
 import { Application, Job } from "@/types";
-import { JobsData } from "@/data/JobsData";
 
-const ApplicationsProvider = ({ children }: { children: React.ReactNode }) => {
+const ApplicationsProvider = ({ jobs = [], children }: {  jobs: Job[], children: React.ReactNode }) => {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [jobFilter, setJobFilter] = useState<string>("ALL");
-  const [jobs, setJobs] = useState<Job[]>(JobsData);
+  const [jobState] = useState<Job[]>(jobs);
   const [applications, setApplications] = useState<Application[]>(ApplicationsData);
 
   const filteredApplications = applications.filter(app => {
@@ -27,7 +26,7 @@ const ApplicationsProvider = ({ children }: { children: React.ReactNode }) => {
 
 
   return (
-    <JobsContext.Provider
+    <ApplicationsContext.Provider
       value={{
         search,
         setSearch,
@@ -36,14 +35,13 @@ const ApplicationsProvider = ({ children }: { children: React.ReactNode }) => {
         jobFilter,
         setJobFilter,
         filteredApplications,
-        jobs,
-        setJobs,
+        jobs: jobState,
         applications,
         setApplications,
       }}
     >
       {children}
-    </JobsContext.Provider>
+    </ApplicationsContext.Provider>
   );
 };
 
