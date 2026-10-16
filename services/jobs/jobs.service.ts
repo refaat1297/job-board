@@ -2,14 +2,7 @@ import {CreateJobInput, createJobSchema} from "./jobs.validation";
 import {Job} from "@/types";
 import { z } from "zod"
 import {JobsData} from "@/data";
-
-type ServiceResult<T> = {
-  success: true,
-  data: T;
-} | {
-  success: false,
-  errors?: Record<string, string[]>
-}
+import { ServiceResult } from "@/types";
 
 export async function createJob(input: CreateJobInput): Promise<ServiceResult<Job>> {
   const validated = createJobSchema.safeParse(input);
